@@ -1,0 +1,8 @@
+server:
+  port: ${PORT:9000}
+
+application:
+  graphql-url: ${GRAPH_QL_URL}
+  client-id: ${CORE_AUTH_CLIENT_ID}
+  client-secret: ${CORE_AUTH_CLIENT_SECRET}
+  token-url: ${TOKEN_URL}

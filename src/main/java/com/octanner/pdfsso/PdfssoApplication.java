@@ -1,13 +1,13 @@
-package com.example.pdfpoc;
+package com.octanner.pdfsso;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PdfpocApplication {
+public class PdfssoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PdfpocApplication.class, args);
+		SpringApplication.run(PdfssoApplication.class, args);
 	}
 
 }
