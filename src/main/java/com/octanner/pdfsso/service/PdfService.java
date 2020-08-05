@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -67,7 +68,7 @@ public class PdfService {
             contentStream.endText();
 
             //Creating PDImageXObject object
-            PDImageXObject pdImage = PDImageXObject.createFromFile("/Users/ericlineback/Downloads/pdfpoc/src/main/resources/images/jon.png",document);
+            PDImageXObject pdImage = PDImageXObject.createFromFile(new ClassPathResource("images/jon.png").getURI().getPath(),document);
 
             //Drawing the image in the PDF document
             contentStream.drawImage(pdImage, 5, 5);
