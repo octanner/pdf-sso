@@ -70,8 +70,8 @@ public class PdfService {
             contentStream.endText();
 
             //Creating PDImageXObject object
-            String pic = new ClassPathResource("images/jon.png").getPath();
-            log.info("This is using getPath:   " + pic);
+            String pic = new ClassPathResource("images/jon.png").getURL().getPath();
+            log.info("This is using .getURL().getPath():   " + pic);
             PDImageXObject pdImage = PDImageXObject.createFromFile(pic,document);
 
             //Drawing the image in the PDF document
