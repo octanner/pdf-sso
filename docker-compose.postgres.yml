@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  db:
+    image: postgres
+    hostname: postgres-pdfsso
+    container_name: postgres-pdfsso
+    ports:
+      - '5661:5432'
+    environment:
+      POSTGRES_USER: guest
+      POSTGRES_PASSWORD: guest
+      POSTGRES_DB: pdfsso

@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  lenses:
+    image: landoop/kafka-lenses-dev:3.0
+    container_name: lenses-pdfsso
+    environment:
+      EULA: https://dl.lenses.io/d/?id=6b87791f-4e97-4715-a3fa-4aa26a1058cd
+      SAMPLEDATA: 0
+      ADV_HOST: 127.0.0.1
+      CONNECTORS: jdbc, elasticsearch
+
+    ports:
+      - '2181:2181'
+      - '3030:3030'
+      - '8081:8081'
+      - '9092:9092'
+      - '9581:9581'
+      - '9582:9582'
+      - '9584:9584'
+      - '9585:9585'
+    volumes:
+      - ./connector-plugins/obert-jdbc-connector:/connectors/obert-jdbc-connector

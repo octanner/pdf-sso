@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <servers>
+        <server>
+            <username>${env.OCT_VAULT_SHARED_READ_ARTIFACTORY_USERNAME}</username>
+            <password>${env.OCT_VAULT_SHARED_READ_ARTIFACTORY_PASSWORD}</password>
+            <id>oct-local-releases</id>
+        </server>
+        <server>
+            <username>${env.OCT_VAULT_SHARED_READ_ARTIFACTORY_USERNAME}</username>
+            <password>${env.OCT_VAULT_SHARED_READ_ARTIFACTORY_PASSWORD}</password>
+            <id>oct-local-snapshots</id>
+        </server>
+    </servers>
+</settings>
