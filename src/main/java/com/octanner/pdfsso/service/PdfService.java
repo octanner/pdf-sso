@@ -4,6 +4,7 @@ import com.octanner.pdfsso.dto.CreatePdfRequest;
 import com.octanner.pdfsso.service.object.Identity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -18,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 
+@Log4j2
 @Service
 @AllArgsConstructor
 public class PdfService {
@@ -68,7 +70,9 @@ public class PdfService {
             contentStream.endText();
 
             //Creating PDImageXObject object
-            PDImageXObject pdImage = PDImageXObject.createFromFile(new ClassPathResource("images/jon.png").getURI().getPath(),document);
+            String pic = new ClassPathResource("images/jon.png").getURI().getPath();
+            log.info(pic);
+            PDImageXObject pdImage = PDImageXObject.createFromFile(pic,document);
 
             //Drawing the image in the PDF document
             contentStream.drawImage(pdImage, 5, 5);
