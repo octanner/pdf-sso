@@ -3,7 +3,6 @@ package com.octanner.pdfsso.service;
 import com.octanner.pdfsso.dto.CreatePdfRequest;
 import com.octanner.pdfsso.service.object.Identity;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -12,11 +11,13 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import shaded.org.apache.maven.wagon.ResourceDoesNotExistException;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Date;
 
 @Log4j2
@@ -26,16 +27,17 @@ public class PdfService {
 
     private final IdentityInfoService identityInfoService;
 
-    public Path createPdf(CreatePdfRequest createPdfRequest){
+    public byte[] createPdf(CreatePdfRequest createPdfRequest){
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         // Get Identity pii
         Identity identity = identityInfoService.callGraphQL(createPdfRequest.getIdentityId().toString());
         Date timestamp = new Date();
-        String documentName = identity.getFirstName() + identity.getLastName() + timestamp.toString() + ".pdf";
-
+        String documentName = null;
+        documentName = identity.getFirstName() + identity.getLastName() + timestamp.toString();
         // Creating PDF document object
         PDDocument document = new PDDocument();
-
         for (int i=0; i<1; i++) {
             //Creating a blank page
             PDPage blankPage = new PDPage();
@@ -45,7 +47,6 @@ public class PdfService {
         }
 
         try {
-            document.save(documentName);
             PDPage page = document.getPage(0);
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
@@ -69,29 +70,26 @@ public class PdfService {
             contentStream.showText(createPdfRequest.getThirdParagraph());
             contentStream.endText();
 
-            //Creating PDImageXObject object
-            String pic = new ClassPathResource("images/jon.png").getURL().getPath();
-            log.info("This is using .getURL().getPath():   " + pic);
-            PDImageXObject pdImage = PDImageXObject.createFromFile(pic,document);
+            //Creating Image
+            ClassLoader classLoader = getClass().getClassLoader();
+            InputStream resource = classLoader.getResourceAsStream("images/jon.png");
+            PDImageXObject pdImage = null;
+            if(resource != null){
+                pdImage = PDImageXObject.createFromByteArray(document, resource.readAllBytes(), "jon");
+            }else {
+                throw new FileNotFoundException("Was not able to find the image.");
+            }
 
             //Drawing the image in the PDF document
             contentStream.drawImage(pdImage, 5, 5);
-
-            System.out.println("Image inserted");
-
-            System.out.println("Content added");
-
-            //Closing the content stream
             contentStream.close();
 
-            //Saving the document
-            document.save(documentName);
-
+            document.save(byteArrayOutputStream);
             document.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return Paths.get(documentName);
+        ;
+        return byteArrayOutputStream.toByteArray();
     }
 }

@@ -30,7 +30,7 @@ public class PdfController {
     @PostMapping(value = "/create" , produces = "application/pdf")
     public byte[] createPdf(@RequestBody CreatePdfRequest createPdfRequest) throws Exception {
 
-        return Files.readAllBytes(pdfService.createPdf(createPdfRequest));
+        return pdfService.createPdf(createPdfRequest);
     }
 
 }
