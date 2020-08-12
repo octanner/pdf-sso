@@ -1,6 +1,14 @@
 package com.octanner.pdfsso.service;
 
 import com.octanner.pdfsso.dto.CreatePdfRequest;
+import com.octanner.pdfsso.pdfparts.HelpContact;
+import com.octanner.pdfsso.pdfparts.Image;
+import com.octanner.pdfsso.pdfparts.LoginRedeem;
+import com.octanner.pdfsso.pdfparts.Paragraph;
+import com.octanner.pdfsso.pdfparts.TempId;
+import com.octanner.pdfsso.pdfparts.TempLoginTitle;
+import com.octanner.pdfsso.pdfparts.TempPassword;
+import com.octanner.pdfsso.pdfparts.ThankYou;
 import com.octanner.pdfsso.service.object.Identity;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -53,79 +61,38 @@ public class PdfService {
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
             // Thank you
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_BOLD, 30);
-            contentStream.setNonStrokingColor(Color.BLUE);
-            contentStream.newLineAtOffset(50, 650);
-            contentStream.showText("Thank you!");
-            contentStream.endText();
+            new ThankYou(contentStream);
 
             // 1st Paragraph
-            int lineStart = 0;
-            int startX = 50;
-            int startY = 620;
-            String firstParagraph = createPdfRequest.getFirstParagraph();
-            createParagraph(contentStream, lineStart, startX, startY, firstParagraph);
+            new Paragraph(contentStream, 50, 620, createPdfRequest.getFirstParagraph());
 
             // How to login and redeem
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_BOLD, 20);
-            contentStream.setNonStrokingColor(Color.BLUE);
-            contentStream.newLineAtOffset(50, 520);
-            contentStream.showText("How to login and redeem");
-            contentStream.endText();
+            new LoginRedeem(contentStream);
 
-            // 2st Paragraph
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
-            contentStream.setNonStrokingColor(Color.BLACK);
-            contentStream.newLineAtOffset(50, 490);
-            contentStream.showText(createPdfRequest.getSecondParagraph());
-            contentStream.endText();
+            // 2nd Paragraph
+            new Paragraph(contentStream, 50, 460, createPdfRequest.getSecondParagraph());
 
             // Temporary Login
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_BOLD, 20);
-            contentStream.setNonStrokingColor(Color.BLUE);
-            contentStream.newLineAtOffset(50, 420);
-            contentStream.showText("Temporary login");
-            contentStream.endText();
+            new TempLoginTitle(contentStream);
 
             // Id
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_BOLD, 17);
-            contentStream.setNonStrokingColor(Color.DARK_GRAY);
-            contentStream.newLineAtOffset(50, 400);
-            contentStream.showText("ID: ");
-            contentStream.endText();
+            new TempId(contentStream);
 
             // Password
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_BOLD, 17);
-            contentStream.setNonStrokingColor(Color.DARK_GRAY);
-            contentStream.newLineAtOffset(50, 380);
-            contentStream.showText("PASSWORD: ");
-            contentStream.endText();
+            new TempPassword(contentStream);
 
             // 3rd Paragraph
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
-            contentStream.setNonStrokingColor(Color.BLACK);
-            contentStream.newLineAtOffset(50, 360);
-            contentStream.showText(createPdfRequest.getThirdParagraph());
-            contentStream.endText();
+            new Paragraph(contentStream, 50, 290, createPdfRequest.getThirdParagraph());
 
             // Top Image
-            ClassLoader classLoader = getClass().getClassLoader();
-            InputStream resource = classLoader.getResourceAsStream("images/top_image.png");
-            PDImageXObject topImage = null;
-            if(resource != null){
-                topImage = PDImageXObject.createFromByteArray(document, resource.readAllBytes(), "top_image");
-            }else {
-                throw new FileNotFoundException("Was not able to find the image.");
-            }
+            new Image(contentStream, -1, 720, "images/top_image.png", document);
 
-            contentStream.drawImage(topImage, -1, 720);
+            // Bottom Image
+            new Image(contentStream, 250, 50, "images/bottom_logo.png", document);
+
+            // help contact line
+            new HelpContact(contentStream);
+
             contentStream.close();
 
             document.save(byteArrayOutputStream);
@@ -135,50 +102,5 @@ public class PdfService {
         }
         ;
         return byteArrayOutputStream.toByteArray();
-    }
-
-    int[] possibleWrapPoints(String text) {
-        String[] split = text.split("(?<=\\W)");
-        int[] ret = new int[split.length];
-        ret[0] = split[0].length();
-        for ( int i = 1 ; i < split.length ; i++ )
-            ret[i] = ret[i-1] + split[i].length();
-        return ret;
-    }
-
-    void createParagraph(PDPageContentStream contentStream, int lineStart, int startX, int startY, String text) throws IOException {
-        int[] wrapPoints = possibleWrapPoints(text);
-        String firstParagraph = text;
-        for ( int i : wrapPoints ) {
-            if(firstParagraph != null){
-                if(text.substring(lineStart, i).length() >= 70){
-                    contentStream.beginText();
-                    contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
-                    contentStream.setNonStrokingColor(Color.BLACK);
-                    contentStream.newLineAtOffset(startX, startY);
-                    String tempText = text.substring(lineStart, i);
-                    if(tempText.startsWith(" ")){
-                        tempText = tempText.substring(1);
-                    }
-                    contentStream.showText(tempText);
-                    contentStream.endText();
-                    startY = startY - 20;
-                    firstParagraph = text.substring(i);
-                    lineStart = i;
-                }
-                if(firstParagraph.length() < 70){
-                    contentStream.beginText();
-                    contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
-                    contentStream.setNonStrokingColor(Color.BLACK);
-                    contentStream.newLineAtOffset(startX, startY);
-                    if(firstParagraph.startsWith(" ")){
-                        firstParagraph = firstParagraph.substring(1);
-                    }
-                    contentStream.showText(firstParagraph);
-                    contentStream.endText();
-                    firstParagraph = null;
-                }
-            }
-        }
     }
 }
