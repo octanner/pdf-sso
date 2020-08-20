@@ -86,7 +86,7 @@ public class IdentityInfoService {
                 }
 
                 JSONObject jsonResponse = new JSONObject(builder.toString());
-                return gson.fromJson(jsonResponse.getJSONObject("data").toString(), Identity.class);
+                return gson.fromJson(jsonResponse.getJSONObject("data").getJSONObject("identity").toString(), Identity.class);
             }
         }
         catch (Exception e) {

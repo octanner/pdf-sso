@@ -11,8 +11,6 @@ public class CreatePdfRequest {
 
     private UUID customerId;
     private UUID identityId;
-    private String firstParagraph;
-    private String secondParagraph;
-    private String thirdParagraph;
+    private String password;
 
 }

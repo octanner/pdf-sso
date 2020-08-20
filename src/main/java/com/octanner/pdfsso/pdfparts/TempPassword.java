@@ -7,12 +7,12 @@ import java.awt.*;
 import java.io.IOException;
 
 public class TempPassword {
-    public TempPassword(PDPageContentStream contentStream) throws IOException {
+    public TempPassword(PDPageContentStream contentStream, String password) throws IOException {
         contentStream.beginText();
         contentStream.setFont(PDType1Font.TIMES_BOLD, 17);
         contentStream.setNonStrokingColor(Color.DARK_GRAY);
         contentStream.newLineAtOffset(50, 330);
-        contentStream.showText("PASSWORD: ");
+        contentStream.showText("PASSWORD: " + password);
         contentStream.endText();
     }
 }

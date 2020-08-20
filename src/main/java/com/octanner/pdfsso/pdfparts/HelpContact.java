@@ -11,8 +11,8 @@ public class HelpContact {
         contentStream.beginText();
         contentStream.setFont(PDType1Font.TIMES_BOLD, 15);
         contentStream.setNonStrokingColor(Color.BLACK);
-        contentStream.newLineAtOffset(150, 100);
-        contentStream.showText("For any help please contact janedoe@octanner.com");
+        contentStream.newLineAtOffset(50, 100);
+        contentStream.showText("For any help please contact (888)-888-8888 or email helpdesk@octanner.com");
         contentStream.endText();
     }
 }
