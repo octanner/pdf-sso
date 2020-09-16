@@ -8,15 +8,15 @@ import java.io.IOException;
 
 public class Paragraph {
     public Paragraph(PDPageContentStream contentStream, int startX,
-                     int startY, String text) throws IOException {
+                     int startY, String text, PDType1Font fontType, int fontSize, int paragraphLength, int lineSeperation) throws IOException {
         int[] wrapPoints = possibleWrapPoints(text);
         int lineStart = 0;
         String firstParagraph = text;
         for ( int i : wrapPoints ) {
             if(firstParagraph != null){
-                if(text.substring(lineStart, i).length() >= 70){
+                if(text.substring(lineStart, i).length() >= paragraphLength){
                     contentStream.beginText();
-                    contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
+                    contentStream.setFont(fontType, fontSize);
                     contentStream.setNonStrokingColor(Color.BLACK);
                     contentStream.newLineAtOffset(startX, startY);
                     String tempText = text.substring(lineStart, i);
@@ -25,13 +25,13 @@ public class Paragraph {
                     }
                     contentStream.showText(tempText);
                     contentStream.endText();
-                    startY = startY - 20;
+                    startY = startY - lineSeperation;
                     firstParagraph = text.substring(i);
                     lineStart = i;
                 }
-                if(firstParagraph.length() < 70){
+                if(firstParagraph.length() < paragraphLength){
                     contentStream.beginText();
-                    contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
+                    contentStream.setFont(fontType, fontSize);
                     contentStream.setNonStrokingColor(Color.BLACK);
                     contentStream.newLineAtOffset(startX, startY);
                     if(firstParagraph.startsWith(" ")){

@@ -7,11 +7,11 @@ import java.awt.*;
 import java.io.IOException;
 
 public class TempLoginTitle {
-    public TempLoginTitle(PDPageContentStream contentStream) throws IOException {
+    public TempLoginTitle(PDPageContentStream contentStream, int startX, int startY) throws IOException {
         contentStream.beginText();
         contentStream.setFont(PDType1Font.TIMES_BOLD, 20);
         contentStream.setNonStrokingColor(Color.BLUE);
-        contentStream.newLineAtOffset(50, 380);
+        contentStream.newLineAtOffset(startX, startY);
         contentStream.showText("Temporary login");
         contentStream.endText();
     }

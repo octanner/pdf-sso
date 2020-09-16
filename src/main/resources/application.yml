@@ -6,3 +6,5 @@ application:
   client-id: ${CORE_AUTH_CLIENT_ID}
   client-secret: ${CORE_AUTH_CLIENT_SECRET}
   token-url: ${TOKEN_URL}
+
+  create-account-url: ${CREATE_ACCOUNT_URL}

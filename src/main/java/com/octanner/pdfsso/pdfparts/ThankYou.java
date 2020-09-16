@@ -8,12 +8,12 @@ import java.awt.*;
 import java.io.IOException;
 
 public class ThankYou {
-    public ThankYou(PDPageContentStream contentStream, Identity identity) throws IOException {
+    public ThankYou(PDPageContentStream contentStream, Identity identity, int startX, int startY) throws IOException {
         // Thank you
         contentStream.beginText();
         contentStream.setFont(PDType1Font.TIMES_BOLD, 30);
         contentStream.setNonStrokingColor(Color.BLUE);
-        contentStream.newLineAtOffset(50, 650);
+        contentStream.newLineAtOffset(startX, startY);
         contentStream.showText("Welcome " + identity.getFirstName() + " " + identity.getLastName() + "!");
         contentStream.endText();
     }

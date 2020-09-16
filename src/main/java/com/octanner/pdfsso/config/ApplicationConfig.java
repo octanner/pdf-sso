@@ -19,4 +19,6 @@ public class ApplicationConfig {
 
     private String tokenUrl;
 
+    private String createAccountUrl;
+
 }

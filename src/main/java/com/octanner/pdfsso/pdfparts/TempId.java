@@ -8,11 +8,11 @@ import java.awt.*;
 import java.io.IOException;
 
 public class TempId {
-    public TempId(PDPageContentStream contentStream, Identity identity) throws IOException {
+    public TempId(PDPageContentStream contentStream, Identity identity, int startX, int startY)  throws IOException {
         contentStream.beginText();
         contentStream.setFont(PDType1Font.TIMES_BOLD, 17);
         contentStream.setNonStrokingColor(Color.DARK_GRAY);
-        contentStream.newLineAtOffset(50, 350);
+        contentStream.newLineAtOffset(startX, startY);
         contentStream.showText("ID: " + identity.getLoginId());
         contentStream.endText();
     }
