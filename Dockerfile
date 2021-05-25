@@ -1,4 +1,4 @@
-FROM harbor.octanner.io/base/oct-maven:3.6.1-jdk11 as builder
+FROM harbor.octanner.io/base/oct-maven:3.6-jdk11 as builder
 
 # Add a volume pointing to /tmp
 VOLUME /tmp
