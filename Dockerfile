@@ -9,8 +9,6 @@ COPY . /app/
 
 RUN mvn clean package -DskipTests -s settings.xml -l /dev/stdout
 
-FROM quay.octanner.io/base/oct-maven:3.6.1-jdk11
-
 WORKDIR /app
 
 COPY --from=builder /app/target/pdfsso.jar /app/target/pdfsso.jar
