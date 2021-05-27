@@ -9,7 +9,7 @@ COPY . /app/
 
 RUN mvn clean package -DskipTests -s settings.xml -l /dev/stdout
 
-FROM quay.octanner.io/base/oct-maven:3.6.1-jdk11
+FROM harbor.octanner.io/base/oct-maven:3.6-jdk11
 
 WORKDIR /app
 
