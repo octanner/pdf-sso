@@ -9,6 +9,8 @@ COPY . /app/
 
 RUN mvn clean package -DskipTests -s settings.xml -l /dev/stdout
 
+FROM harbor.octanner.io/base/oct-maven:3.6-jdk11
+
 WORKDIR /app
 
 COPY --from=builder /app/target/pdfsso.jar /app/target/pdfsso.jar
